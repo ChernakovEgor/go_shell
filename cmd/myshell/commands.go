@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
 type command struct {
@@ -48,10 +49,25 @@ func commandType(args ...string) {
 	if len(args) == 1 {
 		return
 	}
-	c, ok := commandRegistry[args[1]]
-	if !ok {
-		fmt.Printf("%s: not found\n", args[1])
+
+	cmd := args[1]
+	c, ok := commandRegistry[cmd]
+	if ok {
+		fmt.Printf("%s is %s\n", c.name, c.shellType)
 		return
 	}
-	fmt.Printf("%s is %s\n", c.name, c.shellType)
+
+	pathVar := os.Getenv("PATH")
+	paths := filepath.SplitList(pathVar)
+	for _, path := range paths {
+		f := filepath.Join(path, cmd)
+		_, err := os.Stat(f)
+		if err != nil {
+			continue
+		}
+		fmt.Printf("%s is %s\n", cmd, f)
+		return
+	}
+
+	fmt.Printf("%s: not found\n", cmd)
 }
