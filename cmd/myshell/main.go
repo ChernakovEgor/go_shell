@@ -7,9 +7,8 @@ import (
 )
 
 func main() {
-	fmt.Fprint(os.Stdout, "$ ")
-
 	for {
+		fmt.Fprint(os.Stdout, "$ ")
 		command, err := bufio.NewReader(os.Stdin).ReadString('\n')
 		command = command[:len(command)-1]
 		if err != nil {
