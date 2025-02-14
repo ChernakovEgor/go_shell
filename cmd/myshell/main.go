@@ -20,20 +20,13 @@ func main() {
 		if len(args) == 0 {
 			continue
 		}
-		switch args[0] {
-		case "exit":
-			os.Exit(0)
-		case "echo":
-			handleEcho(args)
-		default:
-			fmt.Printf("%s: command not found\n", args[0])
-		}
-	}
-}
 
-func handleEcho(args []string) {
-	for i := 1; i < len(args); i++ {
-		fmt.Print(args[i], " ")
+		cm, ok := commandRegistry[args[0]]
+		if !ok {
+			fmt.Printf("%s: command not found\n", args[0])
+			continue
+		}
+
+		cm.callback(args...)
 	}
-	fmt.Println()
 }
