@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
+
+	// "os/exec"
 	"path/filepath"
 )
 
@@ -70,4 +73,25 @@ func commandType(args ...string) {
 	}
 
 	fmt.Printf("%s: not found\n", cmd)
+}
+
+func pathCommand(args ...string) error {
+	cmnd := args[0]
+
+	pathVar := os.Getenv("PATH")
+	paths := filepath.SplitList(pathVar)
+	for _, path := range paths {
+		f := filepath.Join(path, cmnd)
+		stat, err := os.Stat(f)
+		if err != nil || stat.Mode().Perm()&0111 != 0111 {
+			continue
+		}
+
+		cmd := exec.Command(f, args[1:]...)
+		res, err := cmd.Output()
+		fmt.Print(string(res))
+		return nil
+	}
+
+	return fmt.Errorf("%s not in PATH", cmnd)
 }

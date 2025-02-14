@@ -22,11 +22,14 @@ func main() {
 		}
 
 		cm, ok := commandRegistry[args[0]]
-		if !ok {
-			fmt.Printf("%s: command not found\n", args[0])
+		if ok {
+			cm.callback(args...)
 			continue
 		}
 
-		cm.callback(args...)
+		err = pathCommand(args...)
+		if err != nil {
+			fmt.Printf("%s: command not found\n", args[0])
+		}
 	}
 }
