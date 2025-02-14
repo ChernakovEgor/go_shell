@@ -17,17 +17,17 @@ func init() {
 	commandRegistry = map[string]command{
 		"exit": {
 			name:      "exit",
-			shellType: "a shell built in",
+			shellType: "a shell builtin",
 			callback:  commandExit,
 		},
 		"echo": {
 			name:      "echo",
-			shellType: "a shell built in",
+			shellType: "a shell builtin",
 			callback:  commandEcho,
 		},
 		"type": {
 			name:      "type",
-			shellType: "a shell built in",
+			shellType: "a shell builtin",
 			callback:  commandType,
 		},
 	}
