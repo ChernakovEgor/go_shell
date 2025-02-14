@@ -17,13 +17,16 @@ func main() {
 		}
 
 		args := strings.Fields(command)
+		if len(args) == 0 {
+			continue
+		}
 		switch args[0] {
 		case "exit":
 			os.Exit(0)
 		case "echo":
 			handleEcho(args)
 		default:
-			fmt.Printf("%s: command not found\n", command)
+			fmt.Printf("%s: command not found\n", args[0])
 		}
 	}
 }
