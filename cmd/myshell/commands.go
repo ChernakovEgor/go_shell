@@ -87,7 +87,7 @@ func pathCommand(args ...string) error {
 			continue
 		}
 
-		cmd := exec.Command(f, args[1:]...)
+		cmd := exec.Command(cmnd, args[1:]...)
 		res, err := cmd.Output()
 		fmt.Print(string(res))
 		return nil
