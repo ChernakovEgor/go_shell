@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -15,16 +16,21 @@ func main() {
 			os.Exit(1)
 		}
 
-		command = command[:len(command)-1]
-		switch command {
-		case "exit 0":
-			handleExit()
+		args := strings.Fields(command)
+		switch args[0] {
+		case "exit":
+			os.Exit(0)
+		case "echo":
+			handleEcho(args)
 		default:
 			fmt.Printf("%s: command not found\n", command)
 		}
 	}
 }
 
-func handleExit() {
-	os.Exit(0)
+func handleEcho(args []string) {
+	for i := 1; i < len(args); i++ {
+		fmt.Print(args[i], " ")
+	}
+	fmt.Println()
 }
