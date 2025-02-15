@@ -123,5 +123,11 @@ func commandCd(state *State, args ...string) {
 		return
 	}
 
+	err = os.Chdir(p)
+	if err != nil {
+		fmt.Printf("cd: %s: could not change directory\n", p)
+		return
+	}
+
 	state.CurrentDir = p
 }
