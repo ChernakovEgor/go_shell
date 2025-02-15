@@ -34,6 +34,11 @@ func init() {
 			shellType: "a shell builtin",
 			callback:  commandType,
 		},
+		"pwd": {
+			name:      "pwd",
+			shellType: "a shell builtin",
+			callback:  commandPwd,
+		},
 	}
 }
 
@@ -94,4 +99,13 @@ func pathCommand(args ...string) error {
 	}
 
 	return fmt.Errorf("%s not in PATH", cmnd)
+}
+
+func commandPwd(args ...string) {
+	p, err := os.Executable()
+	if err != nil {
+		fmt.Printf("could not get pwd: %v", err)
+	}
+
+	fmt.Println(filepath.Dir(p))
 }
