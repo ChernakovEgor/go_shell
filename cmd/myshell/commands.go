@@ -102,10 +102,10 @@ func pathCommand(args ...string) error {
 }
 
 func commandPwd(args ...string) {
-	p, err := os.Executable()
+	p, err := os.Getwd()
 	if err != nil {
 		fmt.Printf("could not get pwd: %v", err)
 	}
 
-	fmt.Println(filepath.Dir(p))
+	fmt.Println(p)
 }
