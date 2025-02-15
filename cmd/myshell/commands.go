@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 
@@ -124,6 +125,12 @@ func commandCd(state *State, args ...string) {
 			fmt.Printf("cd: %s: No such file or directory\n", p)
 			return
 		}
+	} else if p[0] == '~' {
+		home, err := os.UserHomeDir()
+		if err != nil {
+			log.Fatalf("getting home dir: %v", err)
+		}
+		p = home
 	} else {
 		p = filepath.Join(state.CurrentDir, p)
 	}
