@@ -12,7 +12,7 @@ import (
 type command struct {
 	name      string
 	shellType string
-	callback  func(args ...string)
+	callback  func(*State, ...string)
 }
 
 var commandRegistry map[string]command
@@ -39,21 +39,26 @@ func init() {
 			shellType: "a shell builtin",
 			callback:  commandPwd,
 		},
+		"cd": {
+			name:      "cd",
+			shellType: "a shell builtin",
+			callback:  commandCd,
+		},
 	}
 }
 
-func commandExit(args ...string) {
+func commandExit(_ *State, args ...string) {
 	os.Exit(0)
 }
 
-func commandEcho(args ...string) {
+func commandEcho(_ *State, args ...string) {
 	for i := 1; i < len(args); i++ {
 		fmt.Print(args[i], " ")
 	}
 	fmt.Println()
 }
 
-func commandType(args ...string) {
+func commandType(_ *State, args ...string) {
 	if len(args) == 1 {
 		return
 	}
@@ -80,7 +85,7 @@ func commandType(args ...string) {
 	fmt.Printf("%s: not found\n", cmd)
 }
 
-func pathCommand(args ...string) error {
+func pathCommand(_ *State, args ...string) error {
 	cmnd := args[0]
 
 	pathVar := os.Getenv("PATH")
@@ -101,11 +106,22 @@ func pathCommand(args ...string) error {
 	return fmt.Errorf("%s not in PATH", cmnd)
 }
 
-func commandPwd(args ...string) {
-	p, err := os.Getwd()
-	if err != nil {
-		fmt.Printf("could not get pwd: %v", err)
+func commandPwd(state *State, args ...string) {
+	fmt.Println(state.CurrentDir)
+}
+
+func commandCd(state *State, args ...string) {
+	if len(args) == 1 {
+		fmt.Println("go to home")
+		return
 	}
 
-	fmt.Println(p)
+	p := args[1]
+	_, err := os.Stat(p)
+	if err != nil {
+		fmt.Printf("cd: %s: No such file or directory\n", p)
+		return
+	}
+
+	state.CurrentDir = p
 }
