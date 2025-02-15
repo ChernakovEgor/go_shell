@@ -125,9 +125,7 @@ func commandCd(state *State, args ...string) {
 		}
 	}
 
-	if filepath.IsLocal(p) {
-		p = filepath.Join(state.CurrentDir, p)
-	}
+	p = filepath.Join(state.CurrentDir, p)
 
 	err := os.Chdir(p)
 	if err != nil {
