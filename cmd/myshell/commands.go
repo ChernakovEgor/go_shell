@@ -117,15 +117,16 @@ func commandCd(state *State, args ...string) {
 	}
 
 	p := args[1]
+
 	if filepath.IsAbs(p) {
 		_, err := os.Stat(p)
 		if err != nil {
 			fmt.Printf("cd: %s: No such file or directory\n", p)
 			return
 		}
+	} else {
+		p = filepath.Join(state.CurrentDir, p)
 	}
-
-	p = filepath.Join(state.CurrentDir, p)
 
 	err := os.Chdir(p)
 	if err != nil {
